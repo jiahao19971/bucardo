@@ -1910,6 +1910,14 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
         $sth = $sth{hazcol};
         $count = $sth->execute('bucardo', 'bucardo_delta_targets', 'sync');
         $sth->finish();
+
+        ## Add replica identity full
+        $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets REPLICA IDENTITY FULL};
+        $run_sql->($SQL,$dbh);
+
+        $SQL = qq{ALTER TABLE bucardo.bucardo_delta_names REPLICA IDENTITY FULL};
+        $run_sql->($SQL,$dbh);
+        
         if (1 == $count) {
             ## Change the name!
             $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets RENAME sync TO target};
@@ -2398,6 +2406,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                      ALTER txntime SET DEFAULT now()
                };
                $run_sql->($SQL, $dbh);
+
+               $SQL = qq{ALTER TABLE bucardo.$delta_table REPLICA IDENTITY FULL};
+               $run_sql->($SQL, $dbh);
             }
 
             ## Need an index on the txntime column
@@ -2499,6 +2510,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                    );
                 };
                 $run_sql->($SQL,$dbh);
+
+                $SQL = qq{ALTER TABLE bucardo.$track_table REPLICA IDENTITY FULL};
+                $run_sql->($SQL, $dbh);
             }
 
             ## Need to index both columns of the txntime table
