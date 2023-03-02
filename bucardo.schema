@@ -644,7 +644,7 @@ BEGIN
 
   -- Assumes max_identifier_length is 63
   -- Because even if not, we'll still abbreviate for consistency and portability
-  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80);
+  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 88);
   IF (newname != tname) THEN
     SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80)
       || '!'
@@ -1301,8 +1301,8 @@ my $fetch1_sql = sub {
 
 ## Determine the name of some functions we may need
 my $namelen = length($syncname);
-my $kickfunc = $namelen <= 48
-    ? "bucardo_kick_$syncname" : $namelen <= 62
+my $kickfunc = $namelen <= 80
+    ? "bucardo_kick_$syncname" : $namelen <= 88
     ? "bkick_$syncname"
     : sprintf 'bucardo_kick_%d', int (rand(88888) + 11111);
 
@@ -1454,7 +1454,7 @@ BEGIN
   SELECT INTO tname REPLACE($1, '.', '_');
   -- Assumes max_identifier_length is 63
   -- Because even if not, we'll still abbreviate for consistency and portability
-  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80);
+  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 88);
   IF (newname != tname) THEN
     SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80)
       || '!'
@@ -2346,21 +2346,21 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
             ## First step: a way to add things to the bucardo_delta table
 
             ## We can only put a truncate trigger in if the database is 8.4 or higher
-            ## if ($dbh->{pg_server_version} >= 80400) {
-            ##     ## Figure out the name of this trigger
-            ##     my $trunctrig = $namelen <= 42
-            ##         ? "bucardo_note_trunc_$syncname" : $namelen <= 90
-            ##             ? "btrunc_$syncname"
-            ##                : sprintf 'bucardo_note_trunc_%d', int (rand(88888) + 11111);
-            ##     if (! exists $btriggerinfo{$schema}{$table}{$trunctrig}) {
-            ##         $SQL = qq{
-            ##                   CREATE TRIGGER "$trunctrig"
-            ##                   AFTER TRUNCATE ON "$schema"."$table"
-            ##                   FOR EACH STATEMENT EXECUTE PROCEDURE bucardo.bucardo_note_truncation('$syncname')
-            ##                 };
-            ##           ## $run_sql->($SQL,$dbh);
-            ##     }
-            ## }
+            if ($dbh->{pg_server_version} >= 80400) {
+                ## Figure out the name of this trigger
+                my $trunctrig = $namelen <= 80
+                    ? "bucardo_note_trunc_$syncname" : $namelen <= 88
+                        ? "btrunc_$syncname"
+                            : sprintf 'bucardo_note_trunc_%d', int (rand(88888) + 11111);
+                if (! exists $btriggerinfo{$schema}{$table}{$trunctrig}) {
+                    $SQL = qq{
+                              CREATE TRIGGER "$trunctrig"
+                              AFTER TRUNCATE ON "$schema"."$table"
+                              FOR EACH STATEMENT EXECUTE PROCEDURE bucardo.bucardo_note_truncation('$syncname')
+                            };
+                      ## $run_sql->($SQL,$dbh);
+                }
+            }
 
             $SQL = "SELECT bucardo.bucardo_tablename_maker(?)";
             my $makername = $fetch1_sql->($SQL,$dbh,$schema.'_'.$table);
