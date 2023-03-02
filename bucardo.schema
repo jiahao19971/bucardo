@@ -2358,7 +2358,7 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                               AFTER TRUNCATE ON "$schema"."$table"
                               FOR EACH STATEMENT EXECUTE PROCEDURE bucardo.bucardo_note_truncation('$syncname')
                             };
-                      ## $run_sql->($SQL,$dbh);
+                    $run_sql->($SQL,$dbh);
                 }
             }
 
