@@ -2360,7 +2360,7 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                 ##  };
                 ##    $run_sql->($SQL,$dbh);
                 ##}
-            ## }
+            }
 
             $SQL = "SELECT bucardo.bucardo_tablename_maker(?)";
             my $makername = $fetch1_sql->($SQL,$dbh,$schema.'_'.$table);
