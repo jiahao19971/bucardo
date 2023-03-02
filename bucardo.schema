@@ -2354,9 +2354,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                             : sprintf 'bucardo_note_trunc_%d', int (rand(88888) + 11111);
                 if (! exists $btriggerinfo{$schema}{$table}{$trunctrig}) {
                     $SQL = qq{
-          CREATE TRIGGER "$trunctrig"
-          AFTER TRUNCATE ON "$schema"."$table"
-          FOR EACH STATEMENT EXECUTE PROCEDURE bucardo.bucardo_note_truncation('$syncname')
+          # CREATE TRIGGER "$trunctrig"
+          # AFTER TRUNCATE ON "$schema"."$table"
+          # FOR EACH STATEMENT EXECUTE PROCEDURE bucardo.bucardo_note_truncation('$syncname')
         };
                     $run_sql->($SQL,$dbh);
                 }
