@@ -644,9 +644,9 @@ BEGIN
 
   -- Assumes max_identifier_length is 63
   -- Because even if not, we'll still abbreviate for consistency and portability
-  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 57);
+  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 88);
   IF (newname != tname) THEN
-    SELECT INTO newname SUBSTRING(tname FROM 1 FOR 46)
+    SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80)
       || '!'
       || SUBSTRING(MD5(tname) FROM 1 FOR 10);
   END IF;
@@ -1454,9 +1454,9 @@ BEGIN
   SELECT INTO tname REPLACE($1, '.', '_');
   -- Assumes max_identifier_length is 63
   -- Because even if not, we'll still abbreviate for consistency and portability
-  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80);
+  SELECT INTO newname SUBSTRING(tname FROM 1 FOR 88);
   IF (newname != tname) THEN
-    SELECT INTO newname SUBSTRING(tname FROM 1 FOR 46)
+    SELECT INTO newname SUBSTRING(tname FROM 1 FOR 80)
       || '!'
       || SUBSTRING(MD5(tname) FROM 1 FOR 10);
   END IF;
