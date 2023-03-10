@@ -1903,11 +1903,11 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                         cdate      TIMESTAMPTZ NOT NULL DEFAULT now()
                     );
                 };
-            $run_sql->($SQL,$dbh);
-            
-            $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets REPLICA IDENTITY FULL};
-            $run_sql->($SQL,$dbh);
+            $run_sql->($SQL,$dbh); 
         }
+
+        $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets REPLICA IDENTITY FULL};
+        $run_sql->($SQL,$dbh);
 
         ## Rename the target column from 'sync' as older versions used that
         $sth = $sth{hazcol};
