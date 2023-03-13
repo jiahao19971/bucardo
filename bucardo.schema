@@ -1894,6 +1894,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
             $run_sql->($SQL,$dbh);
         }
 
+        # $SQL = qq{ALTER TABLE bucardo.bucardo_delta_names REPLICA IDENTITY FULL};
+        # $run_sql->($SQL,$dbh);
+
         ## Create the bucardo_delta_targets table as needed
         if (! exists $btableoid{'bucardo_delta_targets'}) {
             $SQL = qq{
@@ -1906,8 +1909,8 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
             $run_sql->($SQL,$dbh); 
         }
 
-        $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets REPLICA IDENTITY FULL};
-        $run_sql->($SQL,$dbh);
+        # $SQL = qq{ALTER TABLE bucardo.bucardo_delta_targets REPLICA IDENTITY FULL};
+        # $run_sql->($SQL,$dbh);
 
         ## Rename the target column from 'sync' as older versions used that
         $sth = $sth{hazcol};
