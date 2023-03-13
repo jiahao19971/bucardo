@@ -2406,6 +2406,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                $run_sql->($SQL, $dbh);
             }
 
+            $SQL = qq{ALTER TABLE bucardo.$delta_table REPLICA IDENTITY FULL};
+            $run_sql->($SQL, $dbh);
+
             ## Need an index on the txntime column
             if (! exists $bindexoid{$noquote_index1_name}) {
                 $SQL = qq{CREATE INDEX $index1_name ON bucardo.$delta_table(txntime)};
@@ -2506,6 +2509,9 @@ FOR EACH ROW EXECUTE PROCEDURE bucardo.bucardo_delta_names_helper();
                 };
                 $run_sql->($SQL,$dbh);
             }
+
+            $SQL = qq{ALTER TABLE bucardo.$track_table REPLICA IDENTITY FULL};
+            $run_sql->($SQL, $dbh);
 
             ## Need to index both columns of the txntime table
             if (! exists $bindexoid{$noquote_index3_name}) {
