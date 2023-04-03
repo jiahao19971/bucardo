@@ -5425,7 +5425,7 @@ sub enable_triggers {
         ## If we are using srr, just flip it back to the default
         if ($db->{dbh}{pg_server_version} >= 80300) {
             $self->glog("Setting session_replication_role to default for database $dbname", LOG_VERBOSE);
-            $dbh->do(q{SET session_replication_role = default}); ## Assumes a sane default!
+            $dbh->do(q{select rds_session_replication_role('replica');}); ## Assumes a sane default!
             $dbh->commit();
             $db->{triggers_enabled} = time;
             next;
