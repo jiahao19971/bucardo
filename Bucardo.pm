@@ -5356,7 +5356,7 @@ sub disable_triggers {
     my $dbname = $db->{name};
     if ($dbh->{pg_server_version} >= 80300) {
         $self->glog("Setting session_replication_role to replica for database $dbname", LOG_VERBOSE);
-        $dbh->do(q{SET session_replication_role = 'replica'});
+        $dbh->do(q{select rds_session_replication_role('replica');});
 
         $db->{triggers_enabled} = 0;
         return undef;
